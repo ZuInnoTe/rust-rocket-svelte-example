@@ -1,0 +1,41 @@
+# frontend
+[tasks.build-frontend]
+cwd = "../frontend"
+command = "npm"
+args = ["run", "build"]
+
+[tasks.copy-frontend]
+dependencies = ["build"]
+script = '''
+echo ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}
+mkdir -p ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static
+cp -r ../frontend/.svelte-kit/output/client/* ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static
+cp -r ../frontend/.svelte-kit/output/prerendered/pages/* ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static 
+'''
+
+# backend
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+
+[tasks.build]
+command = "cargo"
+args = ["build","--release"]
+dependencies = ["clean"]
+
+[tasks.test]
+command = "cargo"
+args = ["test"]
+dependencies = ["clean"]
+
+[tasks.build-flow]
+dependencies = [
+    "format",
+    "build",
+    "test"
+]
