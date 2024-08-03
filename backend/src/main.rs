@@ -10,7 +10,9 @@ async fn index() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index]).mount("/public", FileServer::from("./static"))
+    rocket::build()
+        .mount("/", routes![index])
+        .mount("/public", FileServer::from("./static"))
 }
 
 #[cfg(test)]

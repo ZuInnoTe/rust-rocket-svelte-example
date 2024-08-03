@@ -28,6 +28,11 @@ command = "cargo"
 args = ["build","--release"]
 dependencies = ["clean"]
 
+[tasks.run]
+cwd = "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release"
+command = "cargo"
+args = ["run","--release","--manifest-path","../../Cargo.toml"]
+
 [tasks.test]
 command = "cargo"
 args = ["test"]

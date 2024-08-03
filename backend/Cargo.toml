@@ -6,4 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rocket = "0.5.0"
+ammonia = "4"
+rocket = { version="0.5.1", features=["tls"]}
+time = {version="0.3.36"}
