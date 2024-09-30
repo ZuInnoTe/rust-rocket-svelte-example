@@ -17,12 +17,12 @@
 			<IconButton
 				class="material-icons"
 				aria-label="Inventory"
-				on:click={() => navigate('inventory', false)}>inventory</IconButton
+				on:click={() => navigate('ui/inventory', false)}>inventory</IconButton
 			>
 			<IconButton
 				class="material-icons"
 				aria-label="Shopping Cart"
-				on:click={() => navigate('order', false)}>shopping_cart</IconButton
+				on:click={() => navigate('ui/order', false)}>shopping_cart</IconButton
 			>
 			<Title>MyApp</Title>
 		</Section>

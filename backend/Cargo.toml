@@ -9,3 +9,7 @@ edition = "2021"
 ammonia = "4"
 rocket = { version="0.5.1", features=["tls"]}
 time = {version="0.3.36"}
+
+[dependencies.rocket_db_pools]
+version = "0.2.0"
+features = ["sqlx_sqlite"]

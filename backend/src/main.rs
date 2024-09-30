@@ -2,27 +2,24 @@
 extern crate rocket;
 
 use rocket::fs::FileServer;
+use rocket::fs::Options;
+
+pub mod routes;
+
+use rocket::response::Redirect;
+
 
 #[get("/")]
-async fn index() -> &'static str {
-    "Hello, world!"
+fn redirect_frontend() -> Redirect {
+    Redirect::to("/ui")
 }
 
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index])
-        .mount("/public", FileServer::from("./static"))
+        .mount("/ui-api", routes![crate::routes::inventory::inventory])
+        .mount("/ui", FileServer::new("./static",Options::NormalizeDirs | Options::Index))
+        .mount("/",routes![redirect_frontend])
+   
 }
 
-#[cfg(test)]
-mod tests {
-
-    #[rocket::async_test]
-    // Test the index
-    async fn test_index() {
-        let result = super::index().await;
-        let expected = "Hello, world!".to_string();
-        assert_eq!(expected, result);
-    }
-}

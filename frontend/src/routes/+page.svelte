@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-
-	goto('/inventory', false);
+	import Order from '../lib/order/Order.svelte';
 </script>
+
+<Order></Order>

@@ -5,7 +5,7 @@ command = "npm"
 args = ["run", "build"]
 
 [tasks.copy-frontend]
-dependencies = ["build"]
+dependencies = ["build","build-frontend"]
 script = '''
 echo ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}
 mkdir -p ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static

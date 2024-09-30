@@ -1,9 +1,9 @@
 import adapter from '@sveltejs/adapter-static';
-import preprocess from 'svelte-preprocess';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { sveltePreprocess } from 'svelte-preprocess'
 
 export default {
-	preprocess: [preprocess(), vitePreprocess()],
+	preprocess: [sveltePreprocess(), vitePreprocess()],
 	kit: {
 		adapter: adapter({
 			// default options are shown. On some platforms
@@ -13,6 +13,9 @@ export default {
 			fallback: null,
 			precompress: false,
 			strict: true
-		})
+		}),
+		paths: {
+			base: "/ui"
+		}
 	}
 };
