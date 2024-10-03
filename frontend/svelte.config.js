@@ -15,7 +15,8 @@ export default {
 			strict: true
 		}),
 		paths: {
-			base: "/ui"
+			base: "",
+			relative: false
 		}
 	}
 };
