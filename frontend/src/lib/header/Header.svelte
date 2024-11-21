@@ -4,7 +4,7 @@
 	import Fab, { Icon } from '@smui/fab';
 	import IconButton from '@smui/icon-button';
 
-	let topAppBar: TopAppBar;
+	let topAppBar: TopAppBar = $state();
 
 	function navigate(route: string, replaceState: boolean) {
 		goto(`/${route}`, { replaceState });
@@ -17,12 +17,12 @@
 			<IconButton
 				class="material-icons"
 				aria-label="Inventory"
-				on:click={() => navigate('ui/inventory', false)}>inventory</IconButton
+				onclick={() => navigate('ui/inventory', false)}>inventory</IconButton
 			>
 			<IconButton
 				class="material-icons"
 				aria-label="Shopping Cart"
-				on:click={() => navigate('ui/order', false)}>shopping_cart</IconButton
+				onclick={() => navigate('ui/order', false)}>shopping_cart</IconButton
 			>
 			<Title>MyApp</Title>
 		</Section>

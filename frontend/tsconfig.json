@@ -7,8 +7,10 @@
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
-		"sourceMap": false,
-		"strict": true
+		"sourceMap": true,
+		"strict": true,
+		"moduleResolution": "bundler"
+
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

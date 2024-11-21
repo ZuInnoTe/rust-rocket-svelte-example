@@ -12,3 +12,36 @@ export const MOCKDATA_INVENTORY: Product[] = [
 		price: 12.99
 	}
 ];
+
+
+/*
+
+export const MOCKDATA_INVENTORY_PAGE: ProductPage = {
+	content: MOCKDATA_INVENTORY,
+	pageable: {
+	  pageNumber: 0,
+	  pageSize: 20,
+	  sort: {
+		sorted: false,
+		unsorted: true,
+		empty: true,
+	  },
+	  offset: 0,
+	  paged: true,
+	  unpaged: false,
+	},
+	totalPages: 1,
+	totalElements: 2,
+	last: true,
+	size: 20,
+	number: 0,
+	sort: {
+	  sorted: false,
+	  unsorted: true,
+	  empty: true,
+	},
+	numberOfElements: 2,
+	first: true,
+	empty: false,
+  };
+*/  
