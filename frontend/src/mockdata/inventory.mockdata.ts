@@ -13,7 +13,6 @@ export const MOCKDATA_INVENTORY: Product[] = [
 	}
 ];
 
-
 /*
 
 export const MOCKDATA_INVENTORY_PAGE: ProductPage = {
@@ -44,4 +43,4 @@ export const MOCKDATA_INVENTORY_PAGE: ProductPage = {
 	first: true,
 	empty: false,
   };
-*/  
+*/

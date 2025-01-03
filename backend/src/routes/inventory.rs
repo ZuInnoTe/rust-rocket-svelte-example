@@ -1,9 +1,12 @@
-use crate::inventory::product::product;
-
+use crate::inventory;
+use rocket::serde::json::Json;
 
 #[get("/inventory")]
-pub async fn inventory_handler() -> &'static str {
-    "Hello, world!"
+pub async fn inventory_handler() -> Json<Vec<inventory::product::Product>> {
+    match inventory::inventory::get_all_products() {
+        Some(product_list) => Json(product_list),
+        None => Json(Vec::new())
+    }
 }
 
 #[cfg(test)]
@@ -13,7 +16,7 @@ mod tests {
     // Test the index
     async fn test_hello() {
         let result = super::inventory_handler().await;
-        let expected = "Hello, world!".to_string();
-        assert_eq!(expected, result);
+        let expected = 0;
+        assert_eq!(expected, result.len());
     }
 }

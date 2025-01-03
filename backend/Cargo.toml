@@ -7,11 +7,12 @@ edition = "2021"
 
 [dependencies]
 ammonia = "4"
-rocket = { version="0.5.1", features=["tls"]}
+rocket = { version="0.5.1", features=["tls","json","http2"]}
 rust_decimal = { version="1.36.0" }
+rust_decimal_macros  = { version="1.36.0" }
 sqlx = {version = "0.7", features = ["macros", "migrate"]}
 time = {version="0.3.36"}
-uuid = {version = "1.11.0" }
+uuid = {version = "1.11.0", features=["serde","v4"] }
 
 [dependencies.rocket_db_pools]
 version = "0.2.0"

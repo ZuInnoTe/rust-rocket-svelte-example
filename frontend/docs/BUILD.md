@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-You need to have at least NodeJs 20 installed. We recommend to always use the last Long-Term-Support (LTS) version of NodeJs
+You need to have at least NodeJs 22 installed. We recommend to always use the last Long-Term-Support (LTS) version of NodeJs
 
 ## Install dependencies
 

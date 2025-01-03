@@ -1,13 +1,29 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
 	import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
+	
+	import HttpClient from '../httpclient/HttpClient.svelte';
 	import type { Product } from './inventory.model';
-	import { getAllProducts } from './inventory.service';
+	import { dev } from '$app/environment';
+	import { MOCKDATA_INVENTORY } from '../../mockdata/inventory.mockdata';
 
 	let currentProductPage: Product[] = [];
-
-	getAllProducts().then((items) => {
-		currentProductPage = items;
+	let httpClient;
+	onMount(() => {
+		getAllProducts();
 	});
+
+	const getAllProducts = async () => {
+		if (dev) {
+			console.warn('Using mock data - you should not see this in production or there is an issue');
+			currentProductPage = MOCKDATA_INVENTORY;
+		} else {
+			httpClient.request<Product[]>(`/ui-api/inventory`).then((result) => {
+				if (result === null) currentProductPage = [];
+				else currentProductPage = result;
+			});
+		}
+	};
 </script>
 
 <h1>Inventory</h1>
@@ -29,3 +45,5 @@
 		{/each}
 	</Body>
 </DataTable>
+
+<HttpClient bind:this={httpClient}></HttpClient>

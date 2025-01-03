@@ -1,3 +1,8 @@
+# all
+[tasks.build-all]
+dependencies = ["copy-frontend"]
+script = ''
+
 # frontend
 [tasks.build-frontend]
 cwd = "../frontend"
@@ -12,6 +17,7 @@ mkdir -p ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static
 cp -r ../frontend/.svelte-kit/output/client/* ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static
 cp -r ../frontend/.svelte-kit/output/prerendered/pages/* ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static 
 '''
+
 
 # backend
 [tasks.format]
