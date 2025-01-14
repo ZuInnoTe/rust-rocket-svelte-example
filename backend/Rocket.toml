@@ -1,2 +1,6 @@
+[global]
+address = "::1"
+port = 8000
+
 [global.limits]
 json = 5242880

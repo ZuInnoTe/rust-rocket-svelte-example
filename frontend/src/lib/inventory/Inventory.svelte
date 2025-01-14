@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
-	
+
 	import HttpClient from '../httpclient/HttpClient.svelte';
 	import type { Product } from './inventory.model';
 	import { dev } from '$app/environment';
@@ -26,6 +26,8 @@
 	};
 </script>
 
+<HttpClient bind:this={httpClient}></HttpClient>
+
 <h1>Inventory</h1>
 <DataTable table$aria-label="Inventory" style="width: 100%;">
 	<Head>
@@ -45,5 +47,3 @@
 		{/each}
 	</Body>
 </DataTable>
-
-<HttpClient bind:this={httpClient}></HttpClient>

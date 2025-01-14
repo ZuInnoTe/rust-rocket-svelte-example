@@ -1,4 +1,7 @@
 <script lang="ts">
+	/***
+	  HttpClient for a SvelteKit application with an UI based on Svelte Material. Shows errors as a Snackbar and logs them to the console.
+	**/
 	import Snackbar, { Label, Actions } from '@smui/snackbar';
 
 	let snackbarError: Snackbar;
