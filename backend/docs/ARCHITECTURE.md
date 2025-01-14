@@ -57,3 +57,6 @@ This can be done by [configuring](https://rocket.rs/guide/configuration/#configu
 If your application needs very large requests then you should not allow large limits, instead you should design your application that it splits large requests on the client side in smaller bits. For example, a 1 TB file can be split into 5 GB chunks and posted in 5 GB chunks to be afterwards reassembled on server side by a dedicated backend that is not the web application.
 
 In this way, you can keep memory, cpu and other resource usage under control.
+
+# Authentication and Authorisation
+tbds
