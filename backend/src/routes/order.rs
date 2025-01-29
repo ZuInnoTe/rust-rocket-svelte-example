@@ -5,7 +5,7 @@ use rocket::serde::json::Json;
 pub async fn order_handler() -> Json<Vec<order::order::Order>> {
     match order::order::get_all_orders() {
         Some(order_list) => Json(order_list),
-        None => Json(Vec::new())
+        None => Json(Vec::new()),
     }
 }
 

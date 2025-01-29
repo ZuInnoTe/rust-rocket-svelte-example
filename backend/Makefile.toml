@@ -1,6 +1,6 @@
 # all
 [tasks.build-all]
-dependencies = ["copy-frontend"]
+dependencies = ["build","build_frontend","copy-frontend"]
 script = ''
 
 # frontend
@@ -10,12 +10,11 @@ command = "npm"
 args = ["run", "build"]
 
 [tasks.copy-frontend]
-dependencies = ["build","build-frontend"]
 script = '''
-echo ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}
-mkdir -p ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static
-cp -r ../frontend/.svelte-kit/output/client/* ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static
-cp -r ../frontend/.svelte-kit/output/prerendered/pages/* ${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release/static 
+rm -rf ./static
+mkdir -p ./static
+cp -r ../frontend/.svelte-kit/output/client/* ./static
+cp -r ../frontend/.svelte-kit/output/prerendered/pages/* ./static
 '''
 
 
@@ -34,10 +33,20 @@ command = "cargo"
 args = ["build","--release"]
 dependencies = ["clean"]
 
-[tasks.run]
-cwd = "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/release"
+[tasks.install-sqlxcli]
 command = "cargo"
-args = ["run","--release","--manifest-path","../../Cargo.toml"]
+args = ["install","sqlx-cli"]
+
+[tasks.sqlx-prepare]
+env = { "DATABASE_URL" =  { script = ["echo -n sqlite:$(pwd)/db/sqlite/warehouse.sqlite"]} }
+command = "cargo"
+args = ["sqlx","prepare"]
+
+
+[tasks.run]
+dependencies = ["build-frontend","copy-frontend"]
+command = "cargo"
+args = ["run"]
 
 [tasks.test]
 command = "cargo"

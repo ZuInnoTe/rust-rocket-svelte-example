@@ -3,19 +3,34 @@
 #[macro_use]
 extern crate rocket;
 
+use rocket::fairing::{self, AdHoc};
 use rocket::fs::FileServer;
 use rocket::fs::Options;
+use rocket_db_pools::Database;
 
-pub mod routes;
-pub mod inventory; 
+pub mod database;
+pub mod inventory;
 pub mod order;
+pub mod routes;
 
 /// Launch endpoints of the web application
 #[launch]
 fn rocket() -> _ {
     rocket::build()
+        // database
+        .attach(crate::database::Db::init())
+        .attach(AdHoc::try_on_ignite(
+            "Development Migrations",
+            crate::database::run_migrations,
+        ))
         // backend API for the frontend
-        .mount("/ui-api", routes![crate::routes::inventory::inventory_handler,crate::routes::order::order_handler])
+        .mount(
+            "/ui-api",
+            routes![
+                crate::routes::inventory::inventory_handler,
+                crate::routes::order::order_handler
+            ],
+        )
         // redirect frontend routes that only exist in the frontend
         .mount(
             "/ui",

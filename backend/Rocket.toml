@@ -4,3 +4,6 @@ port = 8000
 
 [global.limits]
 json = 5242880
+
+[default.databases.warehouse]
+url = "./db/sqlite/warehouse.sqlite"

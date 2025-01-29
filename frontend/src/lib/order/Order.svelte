@@ -42,7 +42,7 @@
 		{#each currentOrderPage as order (order.id)}
 			<Row>
 				<Cell>{order.id}</Cell>
-				<Cell>{order.orderDateTime}</Cell>
+				<Cell>{order.order_datetime}</Cell>
 				<Cell>{order.product.id}</Cell>
 				<Cell>{order.product.name}</Cell>
 				<Cell numeric>{order.product.price}</Cell>

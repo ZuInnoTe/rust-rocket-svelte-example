@@ -1,13 +1,12 @@
-use rocket::serde::{Serialize, Deserialize};
+use rocket::serde::{Deserialize, Serialize};
 
-
-use uuid::Uuid;
 use rust_decimal::prelude::*;
+use uuid::Uuid;
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Product {
     pub id: Uuid,
-    pub name: String, 
-    pub price: Decimal
+    pub name: String,
+    pub price: Decimal,
 }
