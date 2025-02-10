@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT 'order'.id as order_id,'order'.order_datetime as order_order_datetime,product.id as product_id,product.name as product_name,product.price as product_price FROM 'order' INNER JOIN product on 'order'.product_id = product.id",
+  "describe": {
+    "columns": [
+      {
+        "name": "order_id",
+        "ordinal": 0,
+        "type_info": "Text"
+      },
+      {
+        "name": "order_order_datetime",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "product_id",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "product_name",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "product_price",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      true,
+      true,
+      true,
+      false,
+      true
+    ]
+  },
+  "hash": "a1e6342ef7003d7cbc9cf33d18e17cef3f01937065af7f7a3022b51f2189b92f"
+}
