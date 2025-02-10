@@ -4,19 +4,27 @@
 extern crate rocket;
 
 use rocket::fairing::{self, AdHoc};
-use rocket::fs::FileServer;
-use rocket::fs::Options;
+use rocket::fs::{FileServer, Options};
+
+use rocket::shield::Shield;
+
 use rocket_db_pools::Database;
 
+pub mod configuration;
 pub mod database;
+pub mod httpfirewall;
 pub mod inventory;
 pub mod order;
 pub mod routes;
+pub mod services;
+
 
 /// Launch endpoints of the web application
 #[launch]
 fn rocket() -> _ {
-    rocket::build()
+    let rocket= rocket::build()
+        // shield         
+        .attach(Shield::default())
         // database
         .attach(crate::database::Db::init())
         .attach(AdHoc::try_on_ignite(
@@ -40,5 +48,15 @@ fn rocket() -> _ {
         .mount(
             "/",
             FileServer::new("./static", Options::NormalizeDirs | Options::Index),
-        )
+        );
+        let figment = rocket.figment();
+
+        // extract the entire config any `Deserialize` value
+        let config: crate::configuration::config::Config = figment.extract().expect("config");
+        match  config.app.content_security_policy {
+            Some(csp) => println!("{}", csp),
+            None => println!("no csp")
+        }
+        
+        rocket
 }

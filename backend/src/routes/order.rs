@@ -10,6 +10,8 @@ use tracing::{event, Level};
 use uuid::{Uuid};
 use rocket_db_pools::Connection;
 
+use crate::services::sanitization;
+
 #[get("/order")]
 pub async fn order_handler(mut db: Connection<crate::database::Db>) -> crate::database::Result<Json<Vec<Order>>>{
     event!(Level::DEBUG, "order handler called");
