@@ -1,6 +1,6 @@
 # all
 [tasks.build-all]
-dependencies = ["build","build_frontend","copy-frontend"]
+dependencies = ["build","build-frontend","copy-frontend"]
 script = ''
 
 # frontend

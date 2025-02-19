@@ -9,7 +9,11 @@ json = 5242880
 url = "./db/sqlite/warehouse.sqlite"
 
 [default.app]
-content_security_policy = "default-src 'none'; base-uri 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; media-src 'none'; child-src 'self'; form-action 'self'; frame-ancestors 'none'; navigate-to 'self'; upgrade-insecure-requests"
+static_files = "./static"
+content_security_policy = "default-src 'none'; base-uri 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; media-src 'none'; child-src 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+content_security_policy_inject_nonce_paths = ["^/$","^/index.html$","^/ui/*"]
+content_security_policy_nonce_headers = ["script-src"]
+content_security_policy_inject_nonce_tags = ["script"]
 permission_policy = "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()"
 referrer_policy = "no-referrer"
 cross_origin_embedder_policy = "require-corp; report-to=\"default\""

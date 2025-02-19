@@ -17,3 +17,11 @@
 	@include snackbar.fill-color(color-palette.$red-500);
 	@include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$red-500));
 }
+
+.display-s {
+	display: contents
+}
+
+.table-data {
+   width: 100%
+}

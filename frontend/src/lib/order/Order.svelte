@@ -28,7 +28,7 @@
 <HttpClient bind:this={httpClient}></HttpClient>
 
 <h1>Order</h1>
-<DataTable table$aria-label="Order" style="width: 100%;">
+<DataTable table$aria-label="Order" class="table-data">
 	<Head>
 		<Row>
 			<Cell>Id</Cell>

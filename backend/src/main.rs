@@ -3,8 +3,9 @@
 #[macro_use]
 extern crate rocket;
 
+use configuration::config::read_security_http_headers_config;
 use rocket::fairing::{self, AdHoc};
-use rocket::fs::{FileServer, Options};
+use rocket::fs::{relative, FileServer, Options};
 
 use rocket::shield::Shield;
 
@@ -18,12 +19,11 @@ pub mod order;
 pub mod routes;
 pub mod services;
 
-
 /// Launch endpoints of the web application
 #[launch]
 fn rocket() -> _ {
-    let rocket= rocket::build()
-        // shield         
+    let rocket = rocket::build()
+        // shield
         .attach(Shield::default())
         // database
         .attach(crate::database::Db::init())
@@ -47,16 +47,13 @@ fn rocket() -> _ {
         // deliver frontend
         .mount(
             "/",
-            FileServer::new("./static", Options::NormalizeDirs | Options::Index),
+            FileServer::new(relative!("static"), Options::NormalizeDirs | Options::Index),
         );
-        let figment = rocket.figment();
+    // read application config
+    let figment = rocket.figment();
 
-        // extract the entire config any `Deserialize` value
-        let config: crate::configuration::config::Config = figment.extract().expect("config");
-        match  config.app.content_security_policy {
-            Some(csp) => println!("{}", csp),
-            None => println!("no csp")
-        }
-        
-        rocket
+    let config: crate::configuration::config::Config = figment.extract().expect("config");
+
+    // configure fairing for http security headers
+    rocket.attach(read_security_http_headers_config(config))
 }

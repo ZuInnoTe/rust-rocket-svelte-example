@@ -991,3 +991,11 @@ a:visited {
 .mdc-snackbar.httpclient-error .mdc-snackbar__label {
   color: white;
 }
+
+.display-s {
+  display: contents;
+}
+
+.table-data {
+  width: 100%;
+}

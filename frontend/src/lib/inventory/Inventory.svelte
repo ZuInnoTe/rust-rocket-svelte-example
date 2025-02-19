@@ -29,7 +29,7 @@
 <HttpClient bind:this={httpClient}></HttpClient>
 
 <h1>Inventory</h1>
-<DataTable table$aria-label="Inventory" style="width: 100%;">
+<DataTable table$aria-label="Inventory" class="table-data">
 	<Head>
 		<Row>
 			<Cell>Id</Cell>

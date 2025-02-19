@@ -1,19 +1,21 @@
-use crate::order::order::Order;
 use crate::inventory::{self, product::Product};
+use crate::order::order::Order;
 
-use futures::{stream::TryStreamExt, future::TryFutureExt};
+use futures::{future::TryFutureExt, stream::TryStreamExt};
 use rocket::serde::json::Json;
+use rocket_db_pools::Connection;
 use rust_decimal::prelude::*;
 use time::macros::format_description;
 use time::OffsetDateTime;
 use tracing::{event, Level};
-use uuid::{Uuid};
-use rocket_db_pools::Connection;
+use uuid::Uuid;
 
 use crate::services::sanitization;
 
 #[get("/order")]
-pub async fn order_handler(mut db: Connection<crate::database::Db>) -> crate::database::Result<Json<Vec<Order>>>{
+pub async fn order_handler(
+    mut db: Connection<crate::database::Db>,
+) -> crate::database::Result<Json<Vec<Order>>> {
     event!(Level::DEBUG, "order handler called");
     let format = format_description!(
         "[year]-[month]-[day]T[hour]:[minute]:[second][offset_hour \
@@ -27,10 +29,5 @@ pub async fn order_handler(mut db: Connection<crate::database::Db>) -> crate::da
     Ok(Json(orders))
 }
 
-
-
 #[cfg(test)]
-mod tests {
-
-
-}
+mod tests {}
