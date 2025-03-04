@@ -1,23 +1,24 @@
 [package]
 name = "rust-rocket-backend"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 ammonia = "4"
 base64 = {version = "0.22.1"}
-oauth2 = {version = "4.4.2"}
-openidconnect = {version = "3.5.0"}
+oauth2 = {version = "5.0.0"}
+openidconnect = {version = "4.0.0", features = ["reqwest-blocking","reqwest","rustls-tls"]}
 cfg-if = {version = "1.0.0"}
 futures = {version="0.3.31"}
 rand = { version = "0.9.0", features = ["std_rng"]}
 regex = { version = "1.11.1"}
-rocket = { version="0.5.1", features=["tls","json","http2"]}
+rocket = { version="0.5.1", features=["tls","json","http2", "secrets"]}
 rust_decimal = { version="1.36.0" }
 rust_decimal_macros  = { version="1.36.0" }
 rocket_db_pools = { version = "0.2.0", features = ["sqlx_sqlite"]  }
+serde = {version = "1.0" }
 sqlx = {version = "0.7", default-features = false, features = ["macros", "migrate"]}
 time = {version="0.3.37", features=["serde","macros"]}
 tracing = {version = "0.1.41"}

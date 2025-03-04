@@ -19,7 +19,7 @@ pub struct SecurityHttpHeaders {
 impl Fairing for SecurityHttpHeaders {
     fn info(&self) -> Info {
         Info {
-            name: "HTTPFiewall - Security HTTP Headers",
+            name: "HTTPFirewall - Security HTTP Headers",
             kind: Kind::Request | Kind::Response | Kind::Singleton,
         }
     }

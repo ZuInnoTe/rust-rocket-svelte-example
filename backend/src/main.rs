@@ -16,6 +16,7 @@ pub mod database;
 pub mod httpfirewall;
 pub mod inventory;
 pub mod order;
+pub mod oidc;
 pub mod routes;
 pub mod services;
 

@@ -19,3 +19,10 @@ referrer_policy = "no-referrer"
 cross_origin_embedder_policy = "require-corp; report-to=\"default\""
 cross_origin_opener_policy = "same-origin; report-to=\"default\""
 cross_origin_resource_policy = "same-origin"
+oidc_issuer_url = "https://codeberg.org"
+oidc_redirect_url = "http://localhost:8000/codeberg/oidc/token"
+oidc_client_id = ""
+oidc_client_secret = ""
+oidc_roles_idtoken_claims = ["scope","scp"]
+oidc_roles_userinfoendpoint_claims = ["groups"]
+oidc_claims_separator =  { "scope" = " ", "scp" = " ", "groups" = ","}
