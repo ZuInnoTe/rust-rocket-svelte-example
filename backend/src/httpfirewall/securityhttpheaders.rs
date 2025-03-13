@@ -1,13 +1,14 @@
-use std::collections::HashMap;
+//! Rocket fairing to configure secure HTTP headers, such as content security policies
+
 use std::io;
 
-use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
+use base64::prelude::BASE64_STANDARD;
 use rand::prelude::*;
-use rocket::fairing::{Fairing, Info, Kind, Result};
+use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Status;
-use rocket::{Build, Data, Request, Response, Rocket};
-use tracing::{event, Level};
+use rocket::{Data, Request, Response};
+use tracing::{Level, event};
 
 #[derive(Clone)]
 pub struct SecurityHttpHeaders {
@@ -31,7 +32,7 @@ impl Fairing for SecurityHttpHeaders {
     async fn on_response<'r>(&self, req: &'r Request<'_>, res: &mut Response<'r>) {
         if (res.status() == Status::Ok) {
             let mut body_bytes = res.body_mut().to_bytes().await.unwrap();
-            match self.config.clone().content_security_policy {
+            match self.config.clone().httpheaders.content_security_policy {
                 Some(csp) => {
                     // check if csp is set
                     let mut csp_value = csp;
@@ -42,26 +43,57 @@ impl Fairing for SecurityHttpHeaders {
                         rng.fill_bytes(&mut random_bytes);
                         let random_nonce = BASE64_STANDARD.encode(random_bytes);
                         // insert into tag
-                        match self.config.clone().content_security_policy_inject_nonce_tags {
+                        match self
+                            .config
+                            .clone()
+                            .httpheaders
+                            .content_security_policy_inject_nonce_tags
+                        {
                             Some(csp_tag_list) => {
                                 if self.regex_paths.is_match(req.uri().path().as_str()) {
                                     event!(Level::DEBUG, "Inserting nonce in selected tags");
-                                    match self.config.clone().content_security_policy_nonce_headers {
-                                         Some(csp_nonce_headers) => {
+                                    match self
+                                        .config
+                                        .clone()
+                                        .httpheaders
+                                        .content_security_policy_nonce_headers
+                                    {
+                                        Some(csp_nonce_headers) => {
                                             for csp_nonce_header in csp_nonce_headers {
-                                                csp_value=csp_value.replace(&csp_nonce_header,format!("{} 'nonce-{}'", csp_nonce_header, random_nonce).as_str());
+                                                csp_value = csp_value.replace(
+                                                    &csp_nonce_header,
+                                                    format!(
+                                                        "{} 'nonce-{}'",
+                                                        csp_nonce_header, random_nonce
+                                                    )
+                                                    .as_str(),
+                                                );
                                             }
-                                            let mut updated_body: String= String::from_utf8_lossy(&body_bytes).into();
+                                            let mut updated_body: String =
+                                                String::from_utf8_lossy(&body_bytes).into();
                                             for csp_tag in csp_tag_list {
-                                                updated_body = updated_body.replace(format!("<{}",csp_tag).as_str(), format!("<{} nonce=\"{}\"",csp_tag, random_nonce).as_str());
-                                             }
+                                                updated_body = updated_body.replace(
+                                                    format!("<{}", csp_tag).as_str(),
+                                                    format!(
+                                                        "<{} nonce=\"{}\"",
+                                                        csp_tag, random_nonce
+                                                    )
+                                                    .as_str(),
+                                                );
+                                            }
                                             body_bytes = updated_body.into_bytes();
-                                         }
-                                         None => event!(Level::ERROR, "Configuration: Content-Security-Policy: You did not specify for which CSP attribute a nonce should be added")
+                                        }
+                                        None => event!(
+                                            Level::ERROR,
+                                            "Configuration: Content-Security-Policy: You did not specify for which CSP attribute a nonce should be added"
+                                        ),
                                     }
                                 }
-                            },
-                            None =>     event!(Level::ERROR, "Configuration: Content-Security-Policy: You did not specify a tag to inject a nonce")
+                            }
+                            None => event!(
+                                Level::ERROR,
+                                "Configuration: Content-Security-Policy: You did not specify a tag to inject a nonce"
+                            ),
                         }
 
                         res.set_raw_header("Content-Security-Policy", csp_value);

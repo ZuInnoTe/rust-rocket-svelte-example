@@ -1,7 +1,7 @@
 use rocket::fairing::{self};
 use rocket::{Build, Rocket};
-use rocket_db_pools::sqlx::{self};
 use rocket_db_pools::Database;
+use rocket_db_pools::sqlx::{self};
 
 #[derive(Database)]
 #[database("warehouse")]

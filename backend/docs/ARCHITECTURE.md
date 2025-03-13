@@ -36,7 +36,12 @@ tbd
 # Logging
 Logging is supported using [tracing](https://docs.rs/tracing/latest/tracing/). The main reason is that in async scenarios, such as we implement with Rocket requests, it is difficult to bring the messages in a consistent ordered view establishing temporality and causality when using "traditional" loggers, such as [log](https://docs.rs/log/latest/log/).
 
-You can log events (moments in time) or time spans.
+You can log events (moments in time) or time spans. Example:
+```
+use tracing::{Level, event};
+
+event!(Level::DEBUG, "inventory handler called");
+```
 
 # Security
 ## General

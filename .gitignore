@@ -1,5 +1,7 @@
 # Database
 *.sqlite
+# sbom
+*.cdx.xml
 # Frontend static files
 static/
 # ---> Rust

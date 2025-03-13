@@ -1,10 +1,15 @@
+//! Rocket handler to redirect routes of the SPA frontend to the SPA frontend and not handling them in the backend
+
 use rocket::response::Redirect;
 
 use std::path::{Path, PathBuf};
 
 use rocket::fs::NamedFile;
 
-/// Redirect to the route of the frontend of the Single Page Application (SPA)
+/// Handler to redirect routes of the SPA front end to the SPA frontend
+///
+/// # Arguments
+/// * `path` - path of front-end routes to be routed to the SPA frontend
 ///
 #[get("/<path..>")]
 pub async fn spa_redirect_frontend_route(path: PathBuf) -> Option<NamedFile> {

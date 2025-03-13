@@ -1,12 +1,19 @@
+//! Rocket handler to manage inventory
+
 use crate::inventory::{self, product::Product};
-use futures::{future::TryFutureExt, stream::TryStreamExt};
+use futures::stream::TryStreamExt;
 use rocket::serde::json::Json;
 
 use rocket_db_pools::Connection;
 use rust_decimal::prelude::*;
-use tracing::{event, Level};
+use tracing::{Level, event};
 use uuid::Uuid;
 
+/// Hnadler to list all inventory
+///
+/// # Arguments
+/// * `db` - Async connection object to the database
+///
 #[get("/inventory")]
 pub async fn inventory_handler(
     mut db: Connection<crate::database::Db>,

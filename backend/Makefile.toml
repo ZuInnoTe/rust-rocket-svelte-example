@@ -19,6 +19,11 @@ cp -r ../frontend/.svelte-kit/output/prerendered/pages/* ./static
 
 
 # backend
+[tasks.sbom]
+install_crate = "cargo-cyclonedx"
+command = "cargo"
+args = ["cyclonedx"]
+
 [tasks.format]
 install_crate = "rustfmt"
 command = "cargo"

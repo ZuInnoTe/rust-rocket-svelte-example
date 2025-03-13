@@ -3,9 +3,10 @@
 #[macro_use]
 extern crate rocket;
 
-use configuration::config::read_security_http_headers_config;
+use configuration::config::{read_oidc_config, read_security_http_headers_config};
+use oidc::routes::{oidc_redirect,oidc_goto_auth};
 use rocket::fairing::{self, AdHoc};
-use rocket::fs::{relative, FileServer, Options};
+use rocket::fs::{FileServer, Options, relative};
 
 use rocket::shield::Shield;
 
@@ -15,8 +16,8 @@ pub mod configuration;
 pub mod database;
 pub mod httpfirewall;
 pub mod inventory;
-pub mod order;
 pub mod oidc;
+pub mod order;
 pub mod routes;
 pub mod services;
 
@@ -55,6 +56,9 @@ fn rocket() -> _ {
 
     let config: crate::configuration::config::Config = figment.extract().expect("config");
 
+    // create oidc
+    let oidc_flow = read_oidc_config(&config);
+    let rocket = rocket.manage(oidc_flow).mount("/", routes![oidc_redirect, oidc_goto_auth]);
     // configure fairing for http security headers
-    rocket.attach(read_security_http_headers_config(config))
+    rocket.attach(read_security_http_headers_config(&config))
 }

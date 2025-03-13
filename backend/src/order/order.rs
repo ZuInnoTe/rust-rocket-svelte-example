@@ -1,10 +1,10 @@
-use rocket::serde::{Deserialize, Serialize};
-use time::macros::{date, datetime};
+//! Order processing functionality
+
+use rocket::serde::Serialize;
 use time::OffsetDateTime;
 use uuid::Uuid;
 
 use crate::inventory::product::Product;
-use rust_decimal_macros::dec;
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]

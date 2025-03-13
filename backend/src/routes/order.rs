@@ -1,17 +1,22 @@
+//! Rocket handler to manage orders
+
 use crate::inventory::{self, product::Product};
 use crate::order::order::Order;
 
-use futures::{future::TryFutureExt, stream::TryStreamExt};
+use futures::stream::TryStreamExt;
 use rocket::serde::json::Json;
 use rocket_db_pools::Connection;
 use rust_decimal::prelude::*;
-use time::macros::format_description;
 use time::OffsetDateTime;
-use tracing::{event, Level};
+use time::macros::format_description;
+use tracing::{Level, event};
 use uuid::Uuid;
 
-use crate::services::sanitization;
-
+/// Hnadler to list all orders
+///
+/// # Arguments
+/// * `db` - Async connection object to the database
+///
 #[get("/order")]
 pub async fn order_handler(
     mut db: Connection<crate::database::Db>,

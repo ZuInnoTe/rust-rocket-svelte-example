@@ -8,6 +8,9 @@ tbd
 tbd
 
 # Security
+## OIDC: Authentication
+tbd
+## OIDC: Authorization
 tbd
 
 # Database
