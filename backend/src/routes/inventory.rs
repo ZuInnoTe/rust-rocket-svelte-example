@@ -1,6 +1,6 @@
 //! Rocket handler to manage inventory
 
-use crate::inventory::{self, product::Product};
+use crate::{inventory::{self, product::Product}, oidc::guard::OidcUser};
 use futures::stream::TryStreamExt;
 use rocket::serde::json::Json;
 
@@ -16,7 +16,7 @@ use uuid::Uuid;
 ///
 #[get("/inventory")]
 pub async fn inventory_handler(
-    mut db: Connection<crate::database::Db>,
+    mut db: Connection<crate::database::Db>, user: OidcUser
 ) -> crate::database::Result<Json<Vec<inventory::product::Product>>> {
     event!(Level::DEBUG, "inventory handler called");
     let products = sqlx::query!("SELECT id,name,price FROM product")

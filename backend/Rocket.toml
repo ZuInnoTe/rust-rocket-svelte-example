@@ -23,10 +23,11 @@ cross_origin_opener_policy = "same-origin; report-to=\"default\""
 cross_origin_resource_policy = "same-origin"
 
 [default.app.oidc]
-issuer_url = ""
-redirect_url = ""
+issuer_url = "https://codeberg.org/"
+redirect_url = "http://localhost:8000/oidc/redirect"
 client_id = ""
 client_secret = ""
-roles_idtoken_claims = ["scope","scp"]
+roles_idtoken_claims = []
 roles_userinfoendpoint_claims = ["groups"]
-claims_separator =  { "scope" = " ", "scp" = " ", "groups" = ","}
+claims_separator =  { "groups" = ","}
+scopes = ["oidc", "profile", "groups", "email"]

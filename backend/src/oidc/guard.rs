@@ -1,18 +1,20 @@
 use super::oidcflow::{OidcFlow, OidcSessionCookie};
-use openidconnect::core;
-use openidconnect::{Audience, ClaimsVerificationError, EndUserUsername, SubjectIdentifier};
+
+use openidconnect::{ClaimsVerificationError, EndUserUsername, SubjectIdentifier};
 use rocket::serde::json::serde_json;
 use rocket::{
     State,
     http::{Cookie, Status},
     request::{self, FromRequest, Outcome, Request},
 };
+use serde::Serialize;
+use tracing::{event, Level};
 
+#[derive(Serialize)]
 pub struct OidcUser {
     pub subject: SubjectIdentifier,
-    pub audiences: Vec<Audience>,
     pub preferred_username: Option<EndUserUsername>,
-    pub mapped_roles: Option<Vec<String>>,
+    pub mapped_roles: Vec<String>,
 }
 
 impl OidcUser {
@@ -20,7 +22,7 @@ impl OidcUser {
         oidc: &OidcFlow,
         oidc_session: &OidcSessionCookie,
     ) -> Result<OidcUser, ClaimsVerificationError> {
-        let id_token_verifier: core::CoreIdTokenVerifier = oidc.client.id_token_verifier();
+        let id_token_verifier = oidc.client.id_token_verifier();
         let id_token_claims = match oidc_session
             .id_token
             .claims(&id_token_verifier, &oidc.nonce)
@@ -33,12 +35,10 @@ impl OidcUser {
 
         let preferred_username = id_token_claims.preferred_username().cloned();
         let subject = id_token_claims.subject().clone();
-        let audiences = id_token_claims.audiences().clone();
-        let mapped_roles: Option<Vec<String>> = oidc_session.mapped_roles.clone();
+        let mapped_roles: Vec<String> = oidc_session.mapped_roles.clone();
 
         Ok(OidcUser {
             subject,
-            audiences,
             preferred_username,
             mapped_roles,
         })

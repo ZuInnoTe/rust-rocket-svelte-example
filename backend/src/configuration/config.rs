@@ -1,10 +1,14 @@
-use std::{collections::HashMap, iter::Map};
+use std::collections::HashMap;
 
-use regex::Regex;
-use rocket::serde::Deserialize;
+use rocket::{Build, Rocket, serde::Deserialize};
 use tracing::{Level, event};
 
-use crate::{httpfirewall::securityhttpheaders::SecurityHttpHeaders, oidc::oidcflow::OidcFlow};
+use crate::oidc::routes::{oidc_goto_auth, oidc_redirect, oidc_user_info};
+
+use crate::{
+    httpfirewall::securityhttpheaders::SecurityHttpHeaders,
+    oidc::{self, oidcflow::OidcFlow},
+};
 
 /// Confiugration of oidc authentication/authorization
 #[derive(Debug, Deserialize, Default, Clone)]
@@ -17,6 +21,7 @@ pub struct CustomAppOidcConfig {
     pub roles_idtoken_claims: Option<Vec<String>>,
     pub roles_userinfoendpoint_claims: Option<Vec<String>>,
     pub claims_separator: Option<HashMap<String, String>>,
+    pub scopes: Option<Vec<String>>,
 }
 
 /// Confiugration of custom HttpHeaders
@@ -68,7 +73,15 @@ pub fn read_security_http_headers_config(config: &Config) -> SecurityHttpHeaders
     }
 }
 
-pub fn read_oidc_config(config: &Config) -> OidcFlow {
+pub fn configure_oidc(rocket: Rocket<Build>, config: &Config) -> Rocket<Build> {
+    let oidc_flow = read_oidc_config(&config);
+    rocket
+        .manage(oidc_flow)
+        .manage(config.app.oidc.clone())
+        .mount("/oidc", routes![oidc_redirect, oidc_goto_auth,oidc_user_info])
+}
+
+fn read_oidc_config(config: &Config) -> OidcFlow {
     let issuer_url = match &config.app.oidc.issuer_url {
         Some(issuer_url) => issuer_url,
         None => {
@@ -93,7 +106,17 @@ pub fn read_oidc_config(config: &Config) -> OidcFlow {
             panic!("Invalid client_secret.");
         }
     };
-    match OidcFlow::new(issuer_url.to_string(), redirect_url.to_string(), client_id.to_string(), client_secret.to_string()) {
+    let scopes = match &config.app.oidc.scopes {
+        Some(scopes) => scopes.clone(),
+        None => Vec::new(),
+    };
+    match OidcFlow::new(
+        issuer_url.to_string(),
+        redirect_url.to_string(),
+        client_id.to_string(),
+        client_secret.to_string(),
+        scopes,
+    ) {
         Ok(oidc_flow) => oidc_flow,
         Err(err) => {
             event!(Level::ERROR, "Error initializing Oidc: {:?}", err);

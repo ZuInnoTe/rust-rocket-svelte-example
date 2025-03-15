@@ -1,6 +1,7 @@
 //! Rocket handler to manage orders
 
 use crate::inventory::{self, product::Product};
+use crate::oidc::guard::OidcUser;
 use crate::order::order::Order;
 
 use futures::stream::TryStreamExt;
@@ -19,7 +20,7 @@ use uuid::Uuid;
 ///
 #[get("/order")]
 pub async fn order_handler(
-    mut db: Connection<crate::database::Db>,
+    mut db: Connection<crate::database::Db>, user: OidcUser
 ) -> crate::database::Result<Json<Vec<Order>>> {
     event!(Level::DEBUG, "order handler called");
     let format = format_description!(
