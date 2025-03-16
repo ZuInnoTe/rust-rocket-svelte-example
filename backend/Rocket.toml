@@ -8,8 +8,8 @@ json = 5242880
 [default.databases.warehouse]
 url = "./db/sqlite/warehouse.sqlite"
 
-[default.app]
-static_files = "./static"
+[default.app.fileserver]
+location = "./static"
 
 [default.app.httpheaders]
 content_security_policy = "default-src 'none'; base-uri 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; media-src 'none'; child-src 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"

@@ -3,7 +3,10 @@
 #[macro_use]
 extern crate rocket;
 
-use configuration::config::{configure_oidc, read_security_http_headers_config};
+use configuration::config::configure_fileserver;
+use configuration::config::configure_oidc;
+
+use configuration::config::read_security_http_headers_config;
 
 use rocket::fairing::{self, AdHoc};
 use rocket::fs::{FileServer, Options, relative};
@@ -47,20 +50,15 @@ fn rocket() -> _ {
             routes![crate::routes::redirect_frontend::spa_redirect_frontend_route],
         )
         // deliver frontend
-        .mount(
-            "/",
-            routes![crate::routes::static_serve::serve_static],
-        )
+        .mount("/", routes![crate::routes::static_serve::serve_static])
         // redirect to authentication
-       .mount(
-            "/",
-            routes![crate::oidc::routes::redirect_auth]
-
-        );
+        .mount("/", routes![crate::oidc::routes::redirect_auth]);
     // read application config
     let figment = rocket.figment();
 
     let config: crate::configuration::config::Config = figment.extract().expect("config");
+    // configure file server
+    let rocket = configure_fileserver(rocket, &config);
     // configure fairing for http security headers
     let rocket = rocket.attach(read_security_http_headers_config(&config));
     // create oidc

@@ -5,12 +5,10 @@ use tracing::{Level, event};
 
 use crate::oidc::routes::{oidc_goto_auth, oidc_redirect, oidc_user_info};
 
-use crate::{
-    httpfirewall::securityhttpheaders::SecurityHttpHeaders,
-    oidc::{self, oidcflow::OidcFlow},
-};
+use crate::httpfirewall::securityhttpheaders::SecurityHttpHeaders;
 
-/// Confiugration of oidc authentication/authorization
+use crate::oidc::{self, oidcflow::OidcFlow};
+/// Configuration of oidc authentication/authorization
 #[derive(Debug, Deserialize, Default, Clone)]
 #[serde(crate = "rocket::serde")]
 pub struct CustomAppOidcConfig {
@@ -24,22 +22,30 @@ pub struct CustomAppOidcConfig {
     pub scopes: Option<Vec<String>>,
 }
 
-/// Confiugration of custom HttpHeaders
+/// Configuration of custom HttpHeaders
 #[derive(Debug, Deserialize, Default, Clone)]
 #[serde(crate = "rocket::serde")]
-pub struct CustomAppHttpHeaders {
+pub struct CustomAppHttpHeadersConfig {
     pub content_security_policy: Option<String>,
     pub content_security_policy_inject_nonce_paths: Option<Vec<String>>,
     pub content_security_policy_inject_nonce_tags: Option<Vec<String>>,
     pub content_security_policy_nonce_headers: Option<Vec<String>>,
 }
 
-/// Confiugration of specific modules of the app
+/// Configuration of static file serving
+#[derive(Debug, Deserialize, Default, Clone)]
+#[serde(crate = "rocket::serde")]
+pub struct CustomAppStaticFilesConfig {
+    pub location: String,
+}
+
+/// Configuration of specific modules of the app
 #[derive(Debug, Deserialize, Default, Clone)]
 #[serde(crate = "rocket::serde")]
 pub struct CustomAppConfig {
-    pub httpheaders: CustomAppHttpHeaders,
+    pub httpheaders: CustomAppHttpHeadersConfig,
     pub oidc: CustomAppOidcConfig,
+    pub fileserver: CustomAppStaticFilesConfig,
 }
 
 /// Custom app configuration serialized from a toml file
@@ -73,12 +79,19 @@ pub fn read_security_http_headers_config(config: &Config) -> SecurityHttpHeaders
     }
 }
 
+pub fn configure_fileserver(rocket: Rocket<Build>, config: &Config) -> Rocket<Build> {
+    rocket.manage(config.app.fileserver.clone())
+}
+
 pub fn configure_oidc(rocket: Rocket<Build>, config: &Config) -> Rocket<Build> {
     let oidc_flow = read_oidc_config(&config);
     rocket
         .manage(oidc_flow)
         .manage(config.app.oidc.clone())
-        .mount("/oidc", routes![oidc_redirect, oidc_goto_auth,oidc_user_info])
+        .mount(
+            "/oidc",
+            routes![oidc_redirect, oidc_goto_auth, oidc_user_info],
+        )
 }
 
 fn read_oidc_config(config: &Config) -> OidcFlow {

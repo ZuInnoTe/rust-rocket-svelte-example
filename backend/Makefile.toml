@@ -25,7 +25,6 @@ command = "cargo"
 args = ["cyclonedx"]
 
 [tasks.format]
-install_crate = "rustfmt"
 command = "cargo"
 args = ["fmt", "--", "--emit=files"]
 
@@ -38,11 +37,8 @@ command = "cargo"
 args = ["build","--release"]
 dependencies = ["clean"]
 
-[tasks.install-sqlxcli]
-command = "cargo"
-args = ["install","sqlx-cli"]
-
 [tasks.sqlx-prepare]
+install_crate = "sqlx-cli"
 env = { "DATABASE_URL" =  { script = ["echo -n sqlite:$(pwd)/db/sqlite/warehouse.sqlite"]} }
 command = "cargo"
 args = ["sqlx","prepare"]

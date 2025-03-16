@@ -8,7 +8,7 @@ use rocket::{
     request::{self, FromRequest, Outcome, Request},
 };
 use serde::Serialize;
-use tracing::{event, Level};
+use tracing::{Level, event};
 
 #[derive(Serialize)]
 pub struct OidcUser {

@@ -4,8 +4,8 @@ use std::path::PathBuf;
 use openidconnect::{AuthorizationCode, OAuth2TokenResponse, TokenResponse, reqwest};
 use rocket::http::uri::Reference;
 use rocket::http::{Cookie, SameSite, Status};
-use rocket::serde::json::{serde_json};
-use rocket::{response, Request, Response};
+use rocket::serde::json::serde_json;
+use rocket::{Request, Response, response};
 use rocket::{State, http::CookieJar, response::Redirect};
 use tracing::{Level, event};
 
@@ -30,7 +30,6 @@ enum OidcError {
     ClaimsError(String),
     SerializeSessionCookie(String),
 }
-
 
 #[get("/redirect?<params..>")]
 pub async fn oidc_redirect(
@@ -141,9 +140,9 @@ pub async fn oidc_redirect(
 
     // We need Samesite::Lax, because the cookie is set after a redirect to another web site. Setting it to strict can lead to infinite redirects or outdated sessions
     let session_cookie = Cookie::build(("oidc_user_session", serialized_session_cookie))
-    .path("/")
-    .secure(true)
-    .same_site(SameSite::Lax);
+        .path("/")
+        .secure(true)
+        .same_site(SameSite::Lax);
 
     cookies.add_private(session_cookie);
 
@@ -167,18 +166,16 @@ pub async fn oidc_goto_auth(oidc: &State<OidcFlow>) -> Redirect {
     Redirect::to(redirect_url)
 }
 
-
 #[get("/userinfo")]
 pub async fn oidc_user_info(user: OidcUser) -> String {
-     match serde_json::to_string(&user) {
+    match serde_json::to_string(&user) {
         Ok(json_string) => json_string,
-        Err(_) => "Internal error".to_string()
-     }
-
+        Err(_) => "Internal error".to_string(),
+    }
 }
 
-#[get("/<path..>", rank=3)]
-pub async fn redirect_auth(path: PathBuf,   user: Option<OidcUser>) -> Result<(),Redirect>  {
+#[get("/<path..>", rank = 3)]
+pub async fn redirect_auth(path: PathBuf, user: Option<OidcUser>) -> Result<(), Redirect> {
     let user = user.ok_or_else(|| Redirect::to(uri!("/oidc/login")))?;
     Ok(())
 }
@@ -212,7 +209,6 @@ fn parse_claims(
                     }
                 } else {
                     if claim_value.is_array() {
-
                         match claim_value.as_array() {
                             Some(claim_array) => {
                                 for claim_array_value in claim_array {
