@@ -5,4 +5,4 @@ Find here information on:
 * [Build](./docs/BUILD.md)
 * [Configure](./docs/CONFIGURE.md)
 * [Operations](./docs/OPERATIONS.md)
-* See also [how to Configure an OIDC provider, such as Codeberg.org](./docs/EXAMPLE-CODEBERG-OIDC.mds)
+* See also [how to Configure an OIDC provider, such as Codeberg.org](./docs/EXAMPLE-CODEBERG-OIDC.md)
