@@ -102,6 +102,14 @@ Rocket has an emphasis on [security](https://rocket.rs/guide/introduction/#forew
 However, Rocket also wants to keep its core clean and tested while any extension can be added as a plugin. Hence, we add several aspects in the example that deal with security.
 
 ## Input/Output Sanitization
+
+### SQL injection attacks
+
+You should carefully check the documentation of your database client on how to avoid SQL injection attacks.
+
+For example, for SQLx you can find it here: https://sqlx.dev/article/SQLX_Security_Protecting_Your_Data_from_SQL_Injection_Attacks.html
+
+### Cross-Site Scripting attacks
 We provide input/output sanitization mechanisms based on [Ammonia](
 https://github.com/rust-ammonia/ammonia). This sanitization removes malicious HTML/scripts from any text input from the user/output to the user. The idea is that you can sanitize any user input (e.g. new orders) before storing it in the database and to sanitize anything that comes from the database before returning it to the users. By doing so you can protect your users and your business from any harm coming from cross-site-scripting attacks (e.g. in our demo case malicious orders from customers or leaking of orders of other customers).
 
