@@ -15,26 +15,26 @@ jobs:
         with:
           node-version: '22'
       - name: Cache Rust
-          id: cache-rust
-          uses: actions/cache@v4
-          with:
+        id: cache-rust
+        uses: actions/cache@v4
+        with:
            path: rust
            key: ${{ runner.os }}-rustup-${{env.RUSTUP_TOOLCHAIN}}
       - name: Install rust
-          if: steps.cache-rust.outputs.cache-hit != 'true'
-          run: |
+        if: steps.cache-rust.outputs.cache-hit != 'true'
+        run: |
                  mkdir -p $RUSTUP_HOME
                  mkdir -p $CARGO_HOME
                  curl https://sh.rustup.rs -sSf | sh -s -- -y
                  rustup install $RUSTUP_TOOLCHAIN
                  rustup component add clippy
       - name: Configure Rust and display version
-          run: |
+        run: |
               echo "PATH=$(dirname $(rustup which cargo)):$PATH" >> $GITHUB_ENV
               rustc --version
               cargo --version
       - name: Configure cargo-make
-          run: |
+        run: |
               cargo install --force cargo-make
       - name: Build with rust and cargo make
         run: |
