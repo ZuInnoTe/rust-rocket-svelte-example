@@ -31,11 +31,11 @@ jobs:
       - name: Configure Rust and display version
         run: |
               echo "PATH=$(dirname $(rustup which cargo)):$PATH" >> $GITHUB_ENV
-              echo "PATH=$(dirname $(rustup which cargo)):$PATH"
               rustc --version
               cargo --version
       - name: Build with rust and cargo make
         run: |
+           echo $PATH
            cargo install --force cargo-make
            cd backend
            cargo make build-all
