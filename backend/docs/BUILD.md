@@ -57,6 +57,8 @@ cargo make sbom
 
 This will create a file rust-rocket-backend.cdx.xml containing the SBOM information.
 
+See also the [Rocket deployment guide](https://rocket.rs/guide/deploying/).
+
 # Building the application
 
 You can build the application using 
