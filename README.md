@@ -3,8 +3,6 @@
 An example of a modern Rust rocket application with SvelteKit for developing the frontend:
 * [backend](./backend) - Contains the backend implemented in Rust Rocket
 * [frontend](./frontend) - Contains the frontend implemented in SvelteKit
-* [container](./container) - Contains a ContainerFile so you can build your own OCI-compliant container image (Note: It is up to you to secure it!)
-* [config](./config) - Contains some example configurations
 
 You will find further documentation (e.g. building, configuring etc.) in the corresponding subfolders.
 
