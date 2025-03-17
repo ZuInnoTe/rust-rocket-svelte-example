@@ -5,7 +5,7 @@ env:
     RUSTUP_HOME: "./rust/rustup"
     CARGO_HOME: "./rust/cargo"
 jobs:
-  build-springbootweb:
+  build-rocketsvelte:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
