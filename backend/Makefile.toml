@@ -4,7 +4,14 @@ dependencies = ["build","build-frontend","copy-frontend"]
 script = ''
 
 # frontend
+
+[tasks.install-dep-frontend]
+cwd = "../frontend"
+command = "npm"
+args = ["ci"]
+
 [tasks.build-frontend]
+dependencies = ["install-dep-frontend"]
 cwd = "../frontend"
 command = "npm"
 args = ["run", "build"]
