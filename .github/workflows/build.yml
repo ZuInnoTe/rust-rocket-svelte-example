@@ -36,6 +36,5 @@ jobs:
       - name: Build with rust and cargo make
         run: |
            cargo install cargo-make
-           cargo make --version
-           # cd backend
-           # cargo make build-all
+           cd backend
+           cargo make build-all
