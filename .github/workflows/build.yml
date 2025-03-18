@@ -33,9 +33,11 @@ jobs:
               echo "PATH=$(dirname $(rustup which cargo)):$PATH" >> $GITHUB_ENV
               rustc --version
               cargo --version
+              
       - name: Build with rust and cargo make
         run: |
-           echo $PATH
-           cargo install --force cargo-make
-           cd backend
-           cargo make build-all
+           echo Hallo $PATH
+           echo $(dirname $(rustup which cargo))
+           # cargo install --force cargo-make
+           # cd backend
+           # cargo make build-all
