@@ -109,7 +109,7 @@ content_security_policy = "default-src 'none'; base-uri 'self'; script-src 'self
 content_security_policy_inject_nonce_paths = ["^/$","^/index.html$","^/ui/*"]
 content_security_policy_nonce_headers = ["script-src"]
 content_security_policy_inject_nonce_tags = ["script"]
-permission_policy = "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()"
+permissions_policy = "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()"
 referrer_policy = "no-referrer"
 cross_origin_embedder_policy = "require-corp; report-to=\"default\""
 cross_origin_opener_policy = "same-origin; report-to=\"default\""

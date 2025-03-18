@@ -164,3 +164,5 @@ pub async fn inventory_handler(
 ) -> crate::database::Result<Json<Vec<inventory::product::Product>>> {
     ....
 ```
+
+The OIDC IdToken, AccessToken, mapped roles are stored encryped and tamperproof in a private cookie in the user's browser. This is important, because otherwise the user may give themselves different roles that they are not authorised for.

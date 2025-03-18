@@ -1,3 +1,5 @@
+//! Business data and logic for products
+
 use rocket::serde::{Deserialize, Serialize};
 
 use rust_decimal::prelude::*;

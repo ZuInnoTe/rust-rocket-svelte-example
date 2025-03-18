@@ -1,3 +1,5 @@
+//! Manage application-specific configuration
+
 use std::collections::HashMap;
 
 use rocket::{Build, Rocket, serde::Deserialize};
@@ -30,6 +32,11 @@ pub struct CustomAppHttpHeadersConfig {
     pub content_security_policy_inject_nonce_paths: Option<Vec<String>>,
     pub content_security_policy_inject_nonce_tags: Option<Vec<String>>,
     pub content_security_policy_nonce_headers: Option<Vec<String>>,
+    pub permissions_policy: Option<String>,
+    pub referrer_policy: Option<String>,
+    pub cross_origin_embedder_policy: Option<String>,
+    pub cross_origin_opener_policy: Option<String>,
+    pub cross_origin_resource_policy: Option<String>,
 }
 
 /// Configuration of static file serving
@@ -60,6 +67,9 @@ pub struct Config {
 /// # Arguments
 /// * `config` - Configuration of the Rocket app
 ///
+/// # Returns
+/// Fairing that can be attached using rocket.attach
+///
 pub fn read_security_http_headers_config(config: &Config) -> SecurityHttpHeaders {
     let mut regex_paths = regex::RegexSet::new(Vec::<String>::new()).unwrap();
     match &config
@@ -79,10 +89,28 @@ pub fn read_security_http_headers_config(config: &Config) -> SecurityHttpHeaders
     }
 }
 
+/// Configure static file server for static files (e.g. frontend)
+///
+/// # Arguments
+/// * `rocket` - variable representing a Rocket instance
+/// * `config` - Configuration of the Rocket app
+///
+/// # Returns
+/// rocket representing Rocket instance with static file server configured
+///
 pub fn configure_fileserver(rocket: Rocket<Build>, config: &Config) -> Rocket<Build> {
     rocket.manage(config.app.fileserver.clone())
 }
 
+/// Configure OIDC authentication with Rocket instance
+///
+/// # Arguments
+/// * `rocket` - variable representing a rocket instance
+/// * `config` - Configuration of the Rocket app
+///
+/// # Returns
+/// rocket representing rocket instance with OIDC authentication configured
+///
 pub fn configure_oidc(rocket: Rocket<Build>, config: &Config) -> Rocket<Build> {
     let oidc_flow = read_oidc_config(&config);
     rocket
@@ -94,6 +122,14 @@ pub fn configure_oidc(rocket: Rocket<Build>, config: &Config) -> Rocket<Build> {
         )
 }
 
+/// Reads the OIDC configuration and creates an OIDC client
+///
+/// # Arguments
+/// * `config` - Configuration of the Rocket app
+///
+/// # Returns
+/// OIDC client that should be managed in a state in Rocket
+///
 fn read_oidc_config(config: &Config) -> OidcFlow {
     let issuer_url = match &config.app.oidc.issuer_url {
         Some(issuer_url) => issuer_url,

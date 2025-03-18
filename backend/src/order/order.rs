@@ -1,4 +1,4 @@
-//! Order processing functionality
+//! Business data and logic for orders
 
 use rocket::serde::Serialize;
 use time::OffsetDateTime;

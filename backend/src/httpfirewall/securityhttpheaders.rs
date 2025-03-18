@@ -1,4 +1,4 @@
-//! Rocket fairing to configure secure HTTP headers, such as content security policies
+//! Rocket fairing to inject HTTP security headers, such as content security policies, into responses
 
 use std::io;
 
@@ -10,12 +10,14 @@ use rocket::http::Status;
 use rocket::{Data, Request, Response};
 use tracing::{Level, event};
 
+// Configuration of Fairing
 #[derive(Clone)]
 pub struct SecurityHttpHeaders {
     pub config: crate::configuration::config::CustomAppConfig,
     pub regex_paths: regex::RegexSet,
 }
 
+// Fairing implementation
 #[rocket::async_trait]
 impl Fairing for SecurityHttpHeaders {
     fn info(&self) -> Info {
@@ -25,12 +27,27 @@ impl Fairing for SecurityHttpHeaders {
         }
     }
 
+    /// Executed on every request (we do not need it, but it is part of the Fairing trait)
+    ///
+    /// # Arguments
+    /// * `self` - Struct Security HTTP Headers
+    /// * `req` - Request object
+    ///
+    ///
     async fn on_request(&self, req: &mut Request<'_>, _: &mut Data<'_>) {
         // do nothing
     }
 
+    /// Executed on every response. We inject here the HTTP Security Headers
+    ///
+    /// # Arguments
+    /// * `self` - Struct Security HTTP Headers
+    /// * `req` - Request object
+    /// * `res` - Response object
+    ///
     async fn on_response<'r>(&self, req: &'r Request<'_>, res: &mut Response<'r>) {
         if (res.status() == Status::Ok) {
+            // Configure Content-Security Policy Header and insert nonces
             let mut body_bytes = res.body_mut().to_bytes().await.unwrap();
             match self.config.clone().httpheaders.content_security_policy {
                 Some(csp) => {
@@ -95,9 +112,48 @@ impl Fairing for SecurityHttpHeaders {
                                 "Configuration: Content-Security-Policy: You did not specify a tag to inject a nonce"
                             ),
                         }
-
                         res.set_raw_header("Content-Security-Policy", csp_value);
                         res.set_sized_body(body_bytes.len(), io::Cursor::new(body_bytes));
+                        // Set other HTTP Security Headers
+                        match self.config.clone().httpheaders.permissions_policy {
+                            Some(permissions_policy) => {
+                                res.set_raw_header("Permissions-Policy", permissions_policy);
+                            }
+                            None => (),
+                        };
+                        match self.config.clone().httpheaders.referrer_policy {
+                            Some(referrer_policy) => {
+                                res.set_raw_header("Referrer-Policy", referrer_policy);
+                            }
+                            None => (),
+                        };
+                        match self.config.clone().httpheaders.cross_origin_embedder_policy {
+                            Some(cross_origin_embedder_policy) => {
+                                res.set_raw_header(
+                                    "Cross-Origin-Embedder-Policy",
+                                    cross_origin_embedder_policy,
+                                );
+                            }
+                            None => (),
+                        };
+                        match self.config.clone().httpheaders.cross_origin_opener_policy {
+                            Some(cross_origin_opener_policy) => {
+                                res.set_raw_header(
+                                    "Cross-Origin-Opener-Policy",
+                                    cross_origin_opener_policy,
+                                );
+                            }
+                            None => (),
+                        };
+                        match self.config.clone().httpheaders.cross_origin_resource_policy {
+                            Some(cross_origin_resource_policy) => {
+                                res.set_raw_header(
+                                    "Cross-Origin-Resource-Policy",
+                                    cross_origin_resource_policy,
+                                );
+                            }
+                            None => (),
+                        };
                     }
                 }
                 None => (),

@@ -1,4 +1,4 @@
-//! Rocket handler to manage orders
+//! Rocket route to manage orders
 
 use crate::inventory::{self, product::Product};
 use crate::oidc::guard::OidcUser;
@@ -14,10 +14,14 @@ use time::macros::format_description;
 use tracing::{Level, event};
 use uuid::Uuid;
 
-/// Hnadler to list all orders
+/// Handler to list all orders
 ///
 /// # Arguments
 /// * `db` - Async connection object to the database
+/// * `user` - Authenticated user (no access for unauthenticated users)
+///
+/// # Returns
+/// All orders from the database
 ///
 #[get("/order")]
 pub async fn order_handler(

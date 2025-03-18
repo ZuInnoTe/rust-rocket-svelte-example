@@ -1,3 +1,5 @@
+//! Request guard to ensure OIDC authentication to routes in Rocket
+
 use super::oidcflow::{OidcFlow, OidcSessionCookie};
 
 use openidconnect::{ClaimsVerificationError, EndUserUsername, SubjectIdentifier};
@@ -10,6 +12,7 @@ use rocket::{
 use serde::Serialize;
 use tracing::{Level, event};
 
+// Represents an authenticated user in a Rocket route
 #[derive(Serialize)]
 pub struct OidcUser {
     pub subject: SubjectIdentifier,
@@ -17,6 +20,7 @@ pub struct OidcUser {
     pub mapped_roles: Vec<String>,
 }
 
+// Loads user authentication information from the oidc session cookie
 impl OidcUser {
     fn load_from_session(
         oidc: &OidcFlow,
@@ -45,10 +49,20 @@ impl OidcUser {
     }
 }
 
+// Implementation of the request guard to ensure that the user is authenticated via OIDC
+
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for OidcUser {
     type Error = ();
 
+    /// Executed for each request on which route the OidcUser is included
+    /// Reads from the cookie the user information including the OIDC token
+    /// If they are not presented then a cookie is added from which route the user came from so the user is redirected there again after authentication
+    ///
+    /// # Arguments
+    /// * `req` - Request object
+    ///
+    ///
     async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
         let mut cookies = req.cookies();
         if let Some(serialized_session) = cookies.get_private("oidc_user_session") {

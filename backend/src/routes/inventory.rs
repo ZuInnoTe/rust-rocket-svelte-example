@@ -1,4 +1,4 @@
-//! Rocket handler to manage inventory
+//! Rocket route to manage inventory
 
 use crate::{
     inventory::{self, product::Product},
@@ -19,6 +19,10 @@ use uuid::Uuid;
 ///
 /// # Arguments
 /// * `db` - Async connection object to the database
+/// * `user` - Authenticated user (no access for unauthenticated users)
+///
+/// # Returns
+/// All products from the database
 ///
 #[get("/inventory")]
 pub async fn inventory_handler(

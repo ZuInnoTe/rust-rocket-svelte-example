@@ -1,11 +1,11 @@
+//! Rocket routes related to OIDC to receive information from the OIDC IdP (such as codes) and to finalize the OIDC flows
+
 use std::collections::HashMap;
 use std::path::PathBuf;
 
 use openidconnect::{AuthorizationCode, OAuth2TokenResponse, TokenResponse, reqwest};
-use rocket::http::uri::Reference;
-use rocket::http::{Cookie, SameSite, Status};
+use rocket::http::{Cookie, SameSite};
 use rocket::serde::json::serde_json;
-use rocket::{Request, Response, response};
 use rocket::{State, http::CookieJar, response::Redirect};
 use tracing::{Level, event};
 
@@ -14,6 +14,7 @@ use crate::configuration::config::CustomAppOidcConfig;
 use super::guard::OidcUser;
 use super::oidcflow::{self, OidcAppUserInfoClaims, OidcFlow, OidcSessionCookie, handle_error};
 
+// Standard OIDC params that the OIDC IdP sends as part of its request to a route
 #[derive(FromForm)]
 pub struct OidcParams {
     code: String,
@@ -21,6 +22,7 @@ pub struct OidcParams {
     session_state: Option<String>,
 }
 
+// Errors during handling of OIDC requests
 #[derive(Responder)]
 enum OidcError {
     #[response(status = 500)]
@@ -31,6 +33,19 @@ enum OidcError {
     SerializeSessionCookie(String),
 }
 
+/// Handle reception of code from the OIDC IdP
+/// Exchange of code for OIDC tokens and storing them in a private (encrypted and tamperproof) cookie in the user's browser
+/// Extraction of OIDC claims from the IdToken and UserInfo endpoint and mapping them to roles that are stored in a private (encrypted and tamperproof) cookie in the user's browser
+///
+/// # Arguments
+/// * `cookies` - Cookies of the user  (injected by Rocket)
+/// * `oidc` -  OIDC client (injected by Rocket)
+/// * `oidc_config` - Application-specific OIDC configuration (injected by Rocket)
+/// * `params` - parmaters for this route
+///
+/// # Returns
+///  Redirection to the original route the user requested before authentication
+///
 #[get("/redirect?<params..>")]
 pub async fn oidc_redirect(
     cookies: &CookieJar<'_>,
@@ -52,7 +67,7 @@ pub async fn oidc_redirect(
             ));
         }
     };
-    // fetch token
+    // exchange token
     let code = AuthorizationCode::new(params.code);
     let token_response = match oidc.client.exchange_code(code) {
         Ok(code) => match code.request_async(&http_client).await {
@@ -160,12 +175,28 @@ pub async fn oidc_redirect(
     }
 }
 
+/// Route to login the user via OIDC
+///
+/// # Arguments
+/// * `oidc` -  OIDC client (injected by Rocket)
+///
+/// # Returns
+/// Redirect to the login of the OIDC IdP
+///
 #[get("/login")]
 pub async fn oidc_goto_auth(oidc: &State<OidcFlow>) -> Redirect {
     let redirect_url = oidc.auth_url.to_string();
     Redirect::to(redirect_url)
 }
 
+/// Route to dump some raw information extracted from the OIDC IdP about the currently logged in user
+///
+/// # Arguments
+/// * `user` -  OIDC User object (injected by Rocket via the custom request guard)
+///
+/// # Returns
+/// Redirect to the login of the OIDC IdP
+///
 #[get("/userinfo")]
 pub async fn oidc_user_info(user: OidcUser) -> String {
     match serde_json::to_string(&user) {
@@ -174,12 +205,31 @@ pub async fn oidc_user_info(user: OidcUser) -> String {
     }
 }
 
+/// Redirect unauthenticated user to authentication
+///
+/// # Arguments
+/// * `path` -  route the user tried to access
+/// * `user` -  OIDC User object (injected by Rocket via the custom request guard, only if user is authenticated)
+///
+/// # Returns
+/// Redirect to the login of the OIDC IdP
+///
 #[get("/<path..>", rank = 3)]
 pub async fn redirect_auth(path: PathBuf, user: Option<OidcUser>) -> Result<(), Redirect> {
     let user = user.ok_or_else(|| Redirect::to(uri!("/oidc/login")))?;
     Ok(())
 }
 
+/// Parses claims and maps them to roles for IdTokens or UserInfo endpoint
+///
+/// # Arguments
+/// * `claims` -  claims from the IdToken or UserInfo endpoint
+/// * `claims_to_extract` -  Claims to be mapped to roles
+/// * `oidc_config` - Application-specific OIDC configuration (injected by Rocket) - contains also mapping configuration
+///
+/// # Returns
+/// Redirect to the login of the OIDC IdP
+///
 fn parse_claims(
     claims: HashMap<String, serde_json::Value>,
     claims_to_extract: &Vec<String>,

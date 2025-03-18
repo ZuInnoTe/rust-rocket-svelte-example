@@ -10,6 +10,7 @@ use rocket::{State, fs::NamedFile};
 ///
 /// # Arguments
 /// * `path` - path of front-end routes to be routed to the SPA frontend. Note: Rocket automatically makes sure that they do not allow path-traversal
+/// * `fileserver_config` - configuration of the static file server
 /// * `user` - provided by Rocket only if user is authenticated => otherwise handler cannot be accessed
 ///
 /// Returns the content of the file

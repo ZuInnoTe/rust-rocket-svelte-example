@@ -24,7 +24,7 @@ pub mod order;
 pub mod routes;
 pub mod services;
 
-/// Launch endpoints of the web application
+/// Launch our application configured with custom routes, OIDC autentication and static file serving
 #[launch]
 fn rocket() -> _ {
     let rocket = rocket::build()
