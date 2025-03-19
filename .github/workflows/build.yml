@@ -38,3 +38,4 @@ jobs:
            cargo install cargo-make
            cd backend
            cargo make build-all
+           cargo make sbom
