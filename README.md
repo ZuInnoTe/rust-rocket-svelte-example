@@ -1,6 +1,6 @@
 # Introduction
 
-An example of a modern Rust rocket application with SvelteKit for developing the frontend:
+An example of a modern Rust rocket application using [OIDC](https://en.wikipedia.org/wiki/OpenID#OpenID_Connect_(OIDC)) for authentication/authorisation with SvelteKit for developing the frontend:
 * [backend](./backend) - Contains the backend implemented in Rust Rocket
 * [frontend](./frontend) - Contains the frontend implemented in SvelteKit
 
