@@ -6,6 +6,8 @@ An example of a modern Rust rocket application using [OIDC](https://en.wikipedia
 
 You will find further documentation (e.g. building, configuring etc.) in the corresponding subfolders.
 
+We also [explain how you can integrate it with an OIDC IdP by using Codeberg.org](./backend/docs/EXAMPLE-CODEBERG-OIDC.mds) as an identity provider.
+
 This example project is supposed to be easily reused, so you can build your own complex application.
 
 # License
