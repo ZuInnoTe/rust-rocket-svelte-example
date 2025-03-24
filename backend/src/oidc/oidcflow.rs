@@ -176,7 +176,10 @@ impl OidcFlow {
         }
         // Generate a PKCE challenge.
         let (pkce_challenge, pkce_verifier) = PkceCodeChallenge::new_random_sha256();
-        let (auth_url, csrf_state, nonce) = authorize_url.url();
+        let (auth_url, csrf_state, nonce) = authorize_url
+            // Set the PKCE code challenge.
+            .set_pkce_challenge(pkce_challenge)
+            .url();
         Ok(OidcFlow {
             client,
             auth_url,
