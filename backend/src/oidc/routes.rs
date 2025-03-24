@@ -3,7 +3,9 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-use openidconnect::{AuthorizationCode, OAuth2TokenResponse, TokenResponse, reqwest};
+use openidconnect::{
+    AuthorizationCode, OAuth2TokenResponse, PkceCodeVerifier, TokenResponse, reqwest,
+};
 use rocket::http::{Cookie, SameSite};
 use rocket::serde::json::serde_json;
 use rocket::{State, http::CookieJar, response::Redirect};
@@ -70,7 +72,12 @@ pub async fn oidc_redirect(
     // exchange token
     let code = AuthorizationCode::new(params.code);
     let token_response = match oidc.client.exchange_code(code) {
-        Ok(code) => match code.request_async(&http_client).await {
+        Ok(code) => match code
+            // Set the PKCE code verifier.
+            .set_pkce_verifier(PkceCodeVerifier::new(oidc.pkce_verifier_secret.clone()))
+            .request_async(&http_client)
+            .await
+        {
             Ok(token_response) => token_response,
             Err(err) => {
                 handle_error(&err, "Cannot exchange code");

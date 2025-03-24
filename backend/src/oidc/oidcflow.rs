@@ -6,7 +6,8 @@ use rocket::serde::json::serde_json;
 
 use openidconnect::{
     AccessToken, AdditionalClaims, AuthenticationFlow, Client, ClientId, ClientSecret, CsrfToken,
-    IdToken, IssuerUrl, Nonce, RedirectUrl, Scope, UserInfoClaims,
+    IdToken, IssuerUrl, Nonce, PkceCodeChallenge, PkceCodeVerifier, RedirectUrl, Scope,
+    UserInfoClaims,
 };
 
 use openidconnect::core::{
@@ -68,11 +69,13 @@ type OidcAppClient = Client<
 >;
 
 // Basic data used by the OIDC Client
+
 pub struct OidcFlow {
     pub client: OidcAppClient,
     pub auth_url: url::Url,
     pub csrf_state: CsrfToken,
     pub nonce: Nonce,
+    pub pkce_verifier_secret: String,
 }
 
 // OIDC Session cookie stores OIDC tokens and additional information, such as roles, in a cookie.
@@ -171,14 +174,15 @@ impl OidcFlow {
         for scope in scopes {
             authorize_url = authorize_url.add_scope(Scope::new(scope));
         }
-        let (auth_url, csrf_state, nonce) = authorize_url
-            // This example is requesting access to the the user's profile including email.
-            .url();
+        // Generate a PKCE challenge.
+        let (pkce_challenge, pkce_verifier) = PkceCodeChallenge::new_random_sha256();
+        let (auth_url, csrf_state, nonce) = authorize_url.url();
         Ok(OidcFlow {
             client,
             auth_url,
             csrf_state,
             nonce,
+            pkce_verifier_secret: pkce_verifier.into_secret(),
         })
     }
 }
