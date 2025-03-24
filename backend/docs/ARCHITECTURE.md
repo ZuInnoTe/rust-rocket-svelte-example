@@ -166,3 +166,6 @@ pub async fn inventory_handler(
 ```
 
 The OIDC IdToken, AccessToken, mapped roles are stored encryped and tamperproof in a private cookie in the user's browser. This is important, because otherwise the user may give themselves different roles that they are not authorised for.
+
+Important: We added PCKE verification to the Authorization Code Flow, because this is [mandatory as of OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-12):
+> The authorization code grant is extended with the functionality from PKCE [RFC7636](https://www.rfc-editor.org/info/rfc7636) such that the default method of using the authorization code grant according to this specification requires the addition of the PKCE parameters
