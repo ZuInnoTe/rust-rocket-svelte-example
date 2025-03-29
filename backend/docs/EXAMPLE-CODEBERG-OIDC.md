@@ -73,6 +73,8 @@ If you currently do not develop or have no application deployed then it is stron
 
 Go to the page where you created the application (Settings/Applications) and select "Remove" for the corresponding application.
 
+***DO NOT FORGET TO REMOVE ANY CREDENTIALS FROM Rocket.toml TO PREVENT THEY LEAK INTO THE SOURCE CODE REPOSITORY***
+
 
 # Some further information about Codeberg.org OIDC Support
 
