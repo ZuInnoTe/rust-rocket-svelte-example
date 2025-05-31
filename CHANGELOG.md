@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-
+* Frontend: Update to SvelteKit 2.21.1, Typescript 5.8.3 and various frontend dependency updates
 
 ### Removed
 
