@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "@fontsource/material-icons";
 	import { assets } from '$app/paths';
 	import Header from '../lib/header/Header.svelte';
 	interface Props {

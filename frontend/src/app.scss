@@ -1,3 +1,6 @@
+
+
+
 // Elevation mixins.
 @use '@material/elevation/index' as elevation;
 
@@ -13,6 +16,7 @@
 @use '@material/theme/color-palette';
 @use '@material/theme/theme-color';
 
+
 .mdc-snackbar.httpclient-error {
 	@include snackbar.fill-color(color-palette.$red-500);
 	@include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$red-500));
@@ -24,4 +28,30 @@
 
 .table-data {
 	width: 100%;
+}
+
+// see routes/+layout.svelte on the import of the fontsource package
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
 }
