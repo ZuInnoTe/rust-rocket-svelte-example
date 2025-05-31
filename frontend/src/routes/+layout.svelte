@@ -1,6 +1,8 @@
 <script lang="ts">
 	// include fonts
 	import '@fontsource/material-icons';
+	import '@fontsource/material-symbols-outlined';
+	import '@fontsource/roboto';
 	// include app assets
 	import { assets } from '$app/paths';
 	import Header from '../lib/header/Header.svelte';
