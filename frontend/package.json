@@ -19,7 +19,10 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
+		"@fontsource-utils/scss": "^0.2.1",
 		"@fontsource/material-icons": "^5.2.5",
+		"@fontsource/material-symbols-outlined": "^5.2.10",
+		"@fontsource/roboto": "^5.2.5",
 		"@playwright/test": "^1.52.0",
 		"@smui/button": "^8.0.0-beta.3",
 		"@smui/data-table": "^8.0.0-beta.3",
