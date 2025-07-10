@@ -1,7 +1,8 @@
 # Database
 *.sqlite
 # sbom
-*.cdx.xm
+*.cdx.xml
+frontend-sbom.json
 # secret
 secret.toml
 # Frontend static files
@@ -33,6 +34,9 @@ dist/
 test-results/
 
 # IDE
+## Eclipse Theia
+*.theia-workspace
+
 ## VSCodium / VS Code
 .vscode/*
 !.vscode/settings.json

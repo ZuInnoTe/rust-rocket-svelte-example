@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 * Frontend: Update to SvelteKit 2.21.1, Typescript 5.8.3 and various frontend dependency updates
 * Frontend: Include offline fonts/icons from https://fontsource.org/ instead of static repository
+* Frontend: Software Bill of Material (SBOM) for frontend using [CycloneDX for Node](https://github.com/CycloneDX/cyclonedx-node-npm)
 
 ### Removed
 

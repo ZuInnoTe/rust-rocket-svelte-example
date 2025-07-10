@@ -71,3 +71,13 @@ npm update --save
 Please check the [Svelte Migration Guides](https://svelte.dev/docs/svelte/) when upgrading to another Svelte version.
 
 Make sure you use in your package.json always the latest one. Compare it which one is available on https://www.npmjs.org
+
+# Create Software Bill of Material (SBOM)
+The [Software Bill of Material](https://en.wikipedia.org/wiki/Software_supply_chain) (SBOM) is an important machine-readable document that contains all the software and versions that you have used to build the software.
+
+You can create it for the frontend as follows:
+```
+npm run sbom
+```
+
+It will create a file called "frontend-sbom.json" that contains the SBOM for the frontend.
