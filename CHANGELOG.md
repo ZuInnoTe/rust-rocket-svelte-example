@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-* Frontend: Update to SvelteKit 2.21.1, Typescript 5.8.3 and various frontend dependency updates
+* Backend: Update to Rust 1.93.0, Ammonia 4.1, openidconnect 4.0.1, cfg-if 1.0.4, rand 0.10.0, regex 1.12.3, rust_decimal 1.40.0, time 0.3.47, tracing 0.1.44, uuid 1.20.0
+* Frontend: Update to SvelteKit 2.50.2, Svelte Material UI 8.0.3, Typescript 5.9.3 and various frontend dependency updates
 * Frontend: Include offline fonts/icons from https://fontsource.org/ instead of static repository
 * Frontend: Software Bill of Material (SBOM) for frontend using [CycloneDX for Node](https://github.com/CycloneDX/cyclonedx-node-npm)
 
