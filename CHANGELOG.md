@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Frontend: Update to Node 24, SvelteKit 2.50.2, Svelte Material UI 8.0.3, Typescript 5.9.3 and various frontend dependency updates
 * Frontend: Include offline fonts/icons from https://fontsource.org/ instead of static repository
 * Frontend: Software Bill of Material (SBOM) for frontend using [CycloneDX for Node](https://github.com/CycloneDX/cyclonedx-node-npm)
+* Frontend: Remove [deprecated svelte:component](https://svelte.dev/docs/svelte/compiler-warnings#svelte_component_deprecated)
 
 ### Removed
 
