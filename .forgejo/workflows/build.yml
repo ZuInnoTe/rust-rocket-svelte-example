@@ -6,7 +6,7 @@ env:
     CARGO_HOME: "./rust/cargo"
 jobs:
   build-rocketsvelte:
-    runs-on: codeberg-small-lazy
+    runs-on: codeberg-medium-lazy
     container:
        image: registry.opensuse.org/opensuse/bci/nodejs:latest
     steps:
