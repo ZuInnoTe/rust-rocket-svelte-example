@@ -27,7 +27,7 @@ jobs:
         run: |
                  mkdir -p $RUSTUP_HOME
                  mkdir -p $CARGO_HOME
-                 curl https://sh.rustup.rs -sSf | sh -s -- -y
+                 sudo zypper in -y rustup
                  rustup install $RUSTUP_TOOLCHAIN
                  rustup component add clippy
       - name: Configure Rust and display version
